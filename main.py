@@ -26,8 +26,12 @@ def main(args: Arguments.parse.Namespace):
     if executor.name != 'train':
         args.batch = 1
 
-    model = models.resnet101(pretrained=True)
-    model.fc = nn.Linear(model.fc.in_features, len(dataset.classes))
+    model = getattr(models, args.backbone)(pretrained=True)
+
+    if args.backbone.startswith('resnet'):
+        model.fc = nn.Linear(model.fc.in_features, len(dataset.classes))
+    elif args.backbone.startswith('mobilenet'):
+        model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, len(dataset.classes))
 
     model = executor.init(model, device, args)
     Path(args.dest).mkdir(exist_ok=True, parents=True)

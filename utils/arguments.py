@@ -23,11 +23,13 @@ class Arguments:
         for executor in executables:
             Executable.s[executor].arguments(cls.parser)
 
-        cls.parser.add_argument('--name', required=False, default='SSD300', type=str,
+        cls.parser.add_argument('--name', required=False, default='classifier', type=str,
                                 help="Name of model")
 
         cls.parser.add_argument('-s', '--seed', required=False, default=42,
                                 help="The answer to life the universe and everything")
+        cls.parser.add_argument('-b', '--backbone', required=False, default='resnet101',
+                                help="Baseline model")
 
         cls.parser.add_argument('-t', '--type', required=False, type=str, default='amano',
                                 help="Dataset type")
