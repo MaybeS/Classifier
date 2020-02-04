@@ -1,11 +1,11 @@
 from pathlib import Path
 
 import torch
-import torch.nn as nn
 import torch.optim as optim
-from torch.utils import data
-from torchvision import datasets, transforms, models
+from torchvision import datasets
 
+from models.model import Model
+from lib.augmentation import Transform
 from utils import seed
 from utils.executable import Executable
 from utils.arguments import Arguments
@@ -15,28 +15,15 @@ def main(args: Arguments.parse.Namespace):
     executor = Executable.s[args.command]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    transform = transforms.Compose([
-        transforms.Resize(230),
-        transforms.RandomResizedCrop(224),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-    ])
+    transform = Transform(args.size)
     dataset = datasets.ImageFolder(args.dataset, transform=transform)
 
-    if executor.name != 'train':
-        args.batch = 1
-
-    model = getattr(models, args.backbone)(pretrained=True)
-
-    if args.backbone.startswith('resnet'):
-        model.fc = nn.Linear(model.fc.in_features, len(dataset.classes))
-    elif args.backbone.startswith('mobilenet'):
-        model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, len(dataset.classes))
+    model = Model.new(args.backbone, len(dataset.classes), pretrained=True)
 
     model = executor.init(model, device, args)
     Path(args.dest).mkdir(exist_ok=True, parents=True)
 
-    criterion = nn.CrossEntropyLoss()
+    criterion = model.loss()
     optimizer = optim.SGD(model.parameters(), lr=args.lr,
                           momentum=args.momentum, weight_decay=args.decay)
     scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=.1)

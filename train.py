@@ -9,6 +9,7 @@ from torch.autograd import Variable
 from torch.utils import data
 
 from utils.arguments import Arguments
+from models.model import DataParallel
 
 
 def arguments(parser):
@@ -57,7 +58,7 @@ def train(model: nn.Module, dataset: data.Dataset,
     correct, total = 0, 0
 
     with tqdm(total=args.epoch, initial=args.start_epoch) as tq:
-        for iteration in range(args.start_epoch, args.epoch):
+        for iteration in range(args.start_epoch, args.epoch + 1):
             try:
                 inputs, targets = next(iterator)
 
