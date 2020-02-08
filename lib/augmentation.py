@@ -3,9 +3,10 @@ from typing import Tuple
 from torchvision import transforms
 
 
-class Transform(transforms):
+class Transform(object):
     def __init__(self, size,
-                 mean: Tuple[float, float, float], std: Tuple[float, float, float]):
+                 mean: Tuple[float, float, float] = None,
+                 std: Tuple[float, float, float] = None):
 
         self.size = size
         mean = mean or (.485, .456, 406)

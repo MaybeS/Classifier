@@ -1,6 +1,8 @@
 import torch.nn as nn
 from torchvision import models
 
+from models.mobilenet.model import mobilenetv3_small
+from models.efficientnet.model import EfficientNet
 from utils.beholder import Beholder
 
 
@@ -22,9 +24,11 @@ class Model(nn.Module, metaclass=Beholder):
         model = getattr(models, backbone, None)
 
         if model is None:
-            from models.mobilenet.model import mobilenetv3_small
-            model = mobilenetv3_small()
             # model = cls.get(backbone)(**kwargs)
+            if backbone == 'mobilenet_v3':
+                model = mobilenetv3_small()
+            elif backbone.startswith('efficientnet'):
+                model = EfficientNet.from_pretrained(backbone, num_classes=class_num)
 
         else:
             model = model(**kwargs)
@@ -34,9 +38,8 @@ class Model(nn.Module, metaclass=Beholder):
             elif backbone.startswith('mobilenet'):
                 model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, class_num)
 
-            model.loss = cls.LOSS
-
         model.load = model.load_state_dict
+        model.LOSS = cls.LOSS
 
         return model
 

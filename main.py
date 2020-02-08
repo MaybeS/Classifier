@@ -23,7 +23,7 @@ def main(args: Arguments.parse.Namespace):
     model = executor.init(model, device, args)
     Path(args.dest).mkdir(exist_ok=True, parents=True)
 
-    criterion = model.loss()
+    criterion = model.LOSS()
     optimizer = optim.SGD(model.parameters(), lr=args.lr,
                           momentum=args.momentum, weight_decay=args.decay)
     scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=.1)
