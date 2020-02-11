@@ -14,7 +14,7 @@ def init(model: nn.Module, device: torch.device,
          args: Arguments.parse.Namespace = None) \
         -> nn.Module:
     model = model.to(device)
-    model.load_state_dict(torch.load(args.model))
+    model.load_state_dict(torch.load(args.model, map_location=lambda s, l: s))
     model.eval()
 
     return model
