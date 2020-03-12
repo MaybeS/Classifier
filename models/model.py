@@ -3,6 +3,7 @@ from torchvision import models
 
 from models.mobilenet.model import mobilenetv3_small
 from models.efficientnet.model import EfficientNet
+from models.deepcalib.model import Calib
 from utils.beholder import Beholder
 
 
@@ -27,9 +28,10 @@ class Model(nn.Module, metaclass=Beholder):
             # model = cls.get(backbone)(**kwargs)
             if backbone == 'mobilenet_v3':
                 model = mobilenetv3_small()
+            elif backbone == 'calib':
+                model = Calib()
             elif backbone.startswith('efficientnet'):
                 model = EfficientNet.from_pretrained(backbone, num_classes=class_num)
-
         else:
             model = model(**kwargs)
 
