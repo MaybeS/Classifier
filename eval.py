@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 from tqdm import tqdm
-import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils import data

@@ -5,7 +5,7 @@ import torch.optim as optim
 from torchvision import datasets
 
 from models.model import Model
-from lib.augmentation import Transform
+from lib.augmentation import Augmentation
 from utils import seed
 from utils.executable import Executable
 from utils.arguments import Arguments
@@ -15,7 +15,7 @@ def main(args: Arguments.parse.Namespace):
     executor = Executable.s[args.command]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    transform = Transform(args.size)
+    transform = Augmentation.get('Transform')(args.size).train(args.command == 'train')
     dataset = datasets.ImageFolder(args.dataset, transform=transform)
 
     model = Model.new(args.backbone, len(dataset.classes), pretrained=True)
