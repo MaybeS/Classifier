@@ -35,7 +35,7 @@ class Transform(Augmentation):
                  std: Tuple[float, float, float] = None):
         super().__init__()
         self.size = size
-        self.mean = mean or (.485, .456, 406)
+        self.mean = mean or (.485, .456, .406)
         self.std = std or (.229, .224, .225)
 
         self.augment = {
