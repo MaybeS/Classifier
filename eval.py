@@ -41,7 +41,7 @@ def eval(model: nn.Module, dataset: data.Dataset,
             total += args.batch
 
             tq.set_postfix(acc=corrects / total)
-            tq.update(1)
+            tq.update(args.batch)
 
     with open(str(dest.joinpath('results.json')), 'w') as f:
         json.dump({
