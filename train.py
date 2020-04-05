@@ -8,8 +8,8 @@ import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 from torch.utils import data
 
-from utils.arguments import Arguments
 from models.model import DataParallel
+from utils.arguments import Arguments
 
 
 def arguments(parser):

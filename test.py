@@ -19,7 +19,7 @@ def init(model: nn.Module, device: torch.device,
     return model
 
 
-def eval(model: nn.Module, dataset: data.Dataset,
+def test(model: nn.Module, dataset: data.Dataset,
          device: torch.device = None, args: Arguments.parse.Namespace = None, **kwargs) \
         -> None:
     loader = data.DataLoader(dataset, args.batch, num_workers=args.worker,

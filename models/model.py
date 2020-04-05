@@ -39,6 +39,8 @@ class Model(nn.Module, metaclass=Beholder):
                 model.fc = nn.Linear(model.fc.in_features, class_num)
             elif backbone.startswith('mobilenet'):
                 model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, class_num)
+            elif backbone.startswith('vgg'):
+                model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, class_num)
 
         model.load = model.load_state_dict
         model.LOSS = cls.LOSS
